@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="DeviceMgr.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -39,11 +40,15 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderMgr.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TimeMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="DeviceMgr.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -54,6 +59,9 @@
     <ClCompile Include="Obj.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderMgr.cpp" />
+    <ClCompile Include="Shape.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -27,6 +27,8 @@ HRESULT CMainGame::Initialize()
 
 INT CMainGame::Update(const float& fTimeDelta)
 {
+	m_pInputMgr->UpdateKey();
+
 	return 0;
 }
 

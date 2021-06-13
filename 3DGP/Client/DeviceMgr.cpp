@@ -12,6 +12,11 @@ CDeviceMgr::~CDeviceMgr()
 	Release();
 }
 
+HRESULT CDeviceMgr::Reset_CommandList()
+{
+	return m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
+}
+
 HRESULT CDeviceMgr::Init_GraphicDevice()
 {
 	if (FAILED(Init_D3DDevice()) |

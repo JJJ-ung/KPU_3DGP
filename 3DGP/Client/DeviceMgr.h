@@ -9,6 +9,13 @@ private:
 	~CDeviceMgr();
 
 public:
+	ID3D12Device* GetDevice() const { return m_pd3dDevice; }
+	ID3D12GraphicsCommandList* GetGraphicsCommandList() const { return m_pd3dCommandList; }
+
+public:
+	HRESULT Reset_CommandList();
+
+public:
 	HRESULT Init_GraphicDevice();
 	HRESULT RenderBegin();
 	HRESULT RenderEnd();
