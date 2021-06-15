@@ -2,6 +2,7 @@
 
 class CInputMgr;
 class CDeviceMgr;
+class CShaderMgr;
 class CMainGame
 {
 public:
@@ -14,8 +15,13 @@ public:
 	INT Render();
 
 private:
-	CInputMgr* m_pInputMgr = nullptr;
+	HRESULT Ready_Manager();
+	HRESULT Ready_Device();
+	HRESULT Ready_Shader();
+
+private:
 	CDeviceMgr* m_pDeviceMgr = nullptr;
+	CShaderMgr* m_pShaderMgr = nullptr;
 
 private:
 	VOID Release();

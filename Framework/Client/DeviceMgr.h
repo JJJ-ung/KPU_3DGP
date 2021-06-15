@@ -1,4 +1,5 @@
 #pragma once
+class CShader;
 class CDeviceMgr
 {
 	DECLARE_SINGLETON(CDeviceMgr)
@@ -11,6 +12,9 @@ public:
 	ID3D12Device* Get_Device() const { return m_pDevice; }
 	ID3D12CommandAllocator* Get_CommandAlloc() const { return m_pCommandAlloc; }
 	ID3D12GraphicsCommandList* Get_CommandLst() const { return m_pCommandLst; }
+
+public:
+	HRESULT Set_RootSignature(ID3D12RootSignature* pRootSig) { if (!pRootSig) return E_FAIL; m_pRootSignature = pRootSig; }
 
 public:
 	HRESULT Reset_CommandAlloc() { return m_pCommandAlloc->Reset(); }
@@ -28,6 +32,11 @@ public:
 	HRESULT Init_DescriptorHeap();
 	HRESULT Init_RenderTarget();
 	HRESULT Init_DepthStencil();
+
+public:
+	// 그리기 명령을 제출하기 전에 파이프라인에 묶어야 할 자원들이 무엇이고 그 자원들이 쉐이더 입력 레지스터들에 어떻게 대응되는지를 정의한다
+	HRESULT Set_RootParameter(D3D12_ROOT_SIGNATURE_DESC tRootDesc);
+	HRESULT Set_GraphicsPipeline(CShader* pVertexShader, CShader* pPixelShader, ID3D12PipelineState* pPipelineState);
 
 private:
 	HRESULT Wait_GPU();
@@ -67,6 +76,7 @@ private:
 
 private:
 	D3D12_RESOURCE_BARRIER			m_tResourceBarr = {};
+	ID3D12RootSignature*						m_pRootSignature = nullptr;
 
 private:
 	FLOAT													m_vClearCol[4] = {};

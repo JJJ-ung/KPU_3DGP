@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headers", "Headers", "{A1BF5530-DC90-4A47-A6DA-C3BEA8D9B919}"
 	ProjectSection(SolutionItems) = preProject
 		Headers\Defines.h = Headers\Defines.h
+		Headers\Dx12.h = Headers\Dx12.h
 		Headers\Enum.h = Headers\Enum.h
 		Headers\Function.h = Headers\Function.h
 		Headers\Struct.h = Headers\Struct.h

@@ -28,6 +28,8 @@
 #include <mmsystem.h>
 #include <dinput.h>
 
+#include "Dx12.h"
+
 #ifdef _DEBUG
 
 #define _CRTDBG_MAP_ALLOC

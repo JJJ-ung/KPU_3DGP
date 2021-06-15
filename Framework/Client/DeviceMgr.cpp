@@ -1,5 +1,6 @@
 #include "framework.h"
 #include "DeviceMgr.h"
+#include "Shader.h"
 
 IMPLEMENT_SINGLETON(CDeviceMgr)
 
@@ -268,6 +269,48 @@ HRESULT CDeviceMgr::Init_DepthStencil()
 
 	D3D12_CPU_DESCRIPTOR_HANDLE tDescHwnd = m_pDsvDescHeap->GetCPUDescriptorHandleForHeapStart();
 	m_pDevice->CreateDepthStencilView(m_pDepthStencilBuff, &tDSVDesc, tDescHwnd);
+
+	return NOERROR;
+}
+
+
+HRESULT CDeviceMgr::Set_RootParameter(D3D12_ROOT_SIGNATURE_DESC tRootDesc)
+{
+	ComPtr<ID3DBlob> serializedRootSig = nullptr;
+	ComPtr<ID3DBlob> errorBlob = nullptr;
+	if (FAILED(D3D12SerializeRootSignature(&tRootDesc, D3D_ROOT_SIGNATURE_VERSION_1,
+		serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf())))
+		return E_FAIL;
+
+	if (FAILED(m_pDevice->CreateRootSignature(0, serializedRootSig->GetBufferPointer(), serializedRootSig->GetBufferSize(), IID_PPV_ARGS(&m_pRootSignature))))
+		return E_FAIL;
+
+	return NOERROR;
+}
+
+HRESULT CDeviceMgr::Set_GraphicsPipeline(CShader* pVertexShader, CShader* pPixelShader, ID3D12PipelineState* pPipelineState)
+{
+	if (!pVertexShader | !pPixelShader)
+		return E_FAIL;
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC tDesc;
+	tDesc.InputLayout = { pVertexShader->Get_InputLayout().data(), (UINT)pVertexShader->Get_InputLayout().size() };
+	tDesc.pRootSignature = m_pRootSignature;
+	tDesc.VS = pVertexShader->Get_ByteCode();
+	tDesc.PS = pPixelShader->Get_ByteCode();
+	tDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	tDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	tDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	tDesc.SampleMask = UINT_MAX;
+	tDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	tDesc.NumRenderTargets = 1;
+	tDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	tDesc.SampleDesc.Count = m_bMsaa ? 4 : 1;
+	tDesc.SampleDesc.Quality = m_bMsaa ? (m_iMsaaLevel - 1) : 0;
+	tDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+	if(FAILED(m_pDevice->CreateGraphicsPipelineState(&tDesc, IID_PPV_ARGS(&pPipelineState))))
+		return E_FAIL;
 
 	return NOERROR;
 }
