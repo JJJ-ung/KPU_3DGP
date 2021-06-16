@@ -1,6 +1,5 @@
 #include "framework.h"
 #include "DeviceMgr.h"
-#include "Shader.h"
 
 IMPLEMENT_SINGLETON(CDeviceMgr)
 
@@ -46,20 +45,24 @@ HRESULT CDeviceMgr::RenderBegin()
 
 	D3D12_CPU_DESCRIPTOR_HANDLE tRtvDescHwnd = m_pRtvDescHeap->GetCPUDescriptorHandleForHeapStart();
 	tRtvDescHwnd.ptr += (m_iSwapChainIdx * m_iRtvDescSize);
-
 	m_pCommandLst->ClearRenderTargetView(tRtvDescHwnd, m_vClearCol, 0, NULL);
 	
 	D3D12_CPU_DESCRIPTOR_HANDLE tDsvDescHwnd = m_pDsvDescHeap->GetCPUDescriptorHandleForHeapStart();
 	m_pCommandLst->ClearDepthStencilView(tDsvDescHwnd, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 	m_pCommandLst->OMSetRenderTargets(1, &tRtvDescHwnd, TRUE, &tDsvDescHwnd);
 
+	m_pCommandLst->RSSetViewports(1, &m_tViewport);
+	m_pCommandLst->RSSetScissorRects(1, &m_tScissorRect);
+
 	return NOERROR;
 }
 
 HRESULT CDeviceMgr::RenderEnd()
 {
+	m_tResourceBarr.Transition.pResource = m_ppSwapChainBuff[m_iSwapChainIdx];
 	m_tResourceBarr.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	m_tResourceBarr.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	m_pCommandLst->ResourceBarrier(1, &m_tResourceBarr);
 
 	if (FAILED(m_pCommandLst->Close()))
 		return E_FAIL;
@@ -271,46 +274,6 @@ HRESULT CDeviceMgr::Init_DepthStencil()
 	m_pDevice->CreateDepthStencilView(m_pDepthStencilBuff, &tDSVDesc, tDescHwnd);
 
 	return NOERROR;
-}
-
-
-HRESULT CDeviceMgr::Set_RootParameter(D3D12_ROOT_SIGNATURE_DESC tRootDesc)
-{
-	ComPtr<ID3DBlob> serializedRootSig = nullptr;
-	ComPtr<ID3DBlob> errorBlob = nullptr;
-	if (FAILED(D3D12SerializeRootSignature(&tRootDesc, D3D_ROOT_SIGNATURE_VERSION_1,
-		serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf())))
-		return E_FAIL;
-
-	if (FAILED(m_pDevice->CreateRootSignature(0, serializedRootSig->GetBufferPointer(), serializedRootSig->GetBufferSize(), IID_PPV_ARGS(&m_pRootSignature))))
-		return E_FAIL;
-
-	return NOERROR;
-}
-
-D3D12_GRAPHICS_PIPELINE_STATE_DESC CDeviceMgr::Create_PipelineDesc(CShader* pVertexShader, CShader* pPixelShader)
-{
-	if (!pVertexShader | !pPixelShader)
-		return {};
-
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC tDesc{};
-	auto p = pVertexShader->Get_InputLayout().data();
-	tDesc.InputLayout = { pVertexShader->Get_InputLayout().data(), (UINT)pVertexShader->Get_InputLayout().size() };
-	tDesc.pRootSignature = m_pRootSignature;
-	tDesc.VS = pVertexShader->Get_ByteCode();
-	tDesc.PS = pPixelShader->Get_ByteCode();
-	tDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	tDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-	tDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	tDesc.SampleMask = UINT_MAX;
-	tDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	tDesc.NumRenderTargets = 1;
-	tDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-	tDesc.SampleDesc.Count = m_bMsaa ? 4 : 1;
-	tDesc.SampleDesc.Quality = m_bMsaa ? (m_iMsaaLevel - 1) : 0;
-	tDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-	return tDesc;
 }
 
 HRESULT CDeviceMgr::Wait_GPU()

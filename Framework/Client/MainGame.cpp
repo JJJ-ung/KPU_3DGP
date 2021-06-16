@@ -2,10 +2,9 @@
 #include "MainGame.h"
 
 #include "DeviceMgr.h"
-#include "ShaderMgr.h"
+#include "CShaderMgr.h"
 
 #include "Mesh.h"
-#include "Shader.h"
 
 CMainGame::CMainGame()
 {
@@ -27,7 +26,9 @@ HRESULT CMainGame::Initialize()
 	if (FAILED(Ready_Shader()))
 		return E_FAIL;
 
-	CMesh::Create("../Binary/Resources/YoshiCart/torokko_yoshi_body01a.obj");
+	m_pTest = CMesh::Create("", L"Color");
+
+
 
 	return NOERROR;
 }
@@ -40,7 +41,9 @@ INT CMainGame::Update(const float& fTimeDelta)
 INT CMainGame::Render()
 {
 	m_pDeviceMgr->RenderBegin();
+
 	// Render
+	m_pTest->Render();
 
 	m_pDeviceMgr->RenderEnd();
 
@@ -56,13 +59,13 @@ HRESULT CMainGame::Ready_Manager()
 	m_pShaderMgr = CShaderMgr::GetInstance();
 	if (!m_pShaderMgr)
 		return E_FAIL;
-	
+
 	return NOERROR;
 }
 
 HRESULT CMainGame::Ready_Device()
 {
-	if (FAILED(m_pDeviceMgr->Init_GraphicDevice(VEC4(0.1f, 0.1f, 0.1f, 1.f))))
+	if (FAILED(m_pDeviceMgr->Init_GraphicDevice(VEC4(0, 0, 1, 1.f))))
 		return E_FAIL;
 
 	return NOERROR;
@@ -70,30 +73,19 @@ HRESULT CMainGame::Ready_Device()
 
 HRESULT CMainGame::Ready_Shader()
 {
-	// 루트 시그니처 생성
-	// 1. 슬롯 추가
-	vector< CD3DX12_ROOT_PARAMETER> vecParam;
-	CD3DX12_DESCRIPTOR_RANGE cbvTable;
-	cbvTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
-	vecParam.push_back({});
-	vecParam[0].InitAsDescriptorTable(1, &cbvTable);
-	// 2. 샘플러 추가
-	vector<CD3DX12_STATIC_SAMPLER_DESC> vecDesc;
-	// 3. 루트 시그니처 생성
-	if (FAILED(m_pShaderMgr->Set_RootSignature((UINT)vecParam.size(), vecParam.data(), (UINT)vecDesc.size(), vecDesc.data())))
+	// Root Parameter
+	CD3DX12_ROOT_PARAMETER slotRootParameter[1];
+	//slotRootParameter[0].InitAsConstantBufferView(0);
+	slotRootParameter[0].InitAsConstants(8, 0);
+	if (FAILED(m_pShaderMgr->Set_RootSignature(1, slotRootParameter, 0, nullptr)))
 		return E_FAIL;
 
-	// 쉐이더 추가 및 컴파일
-	CShader* pShader = nullptr;
-	pShader = m_pShaderMgr->Add_Shader(L"VS", L"../Binary/Shaders/color.hlsl", nullptr, "VS", "vs_5_1");
-	if (!pShader) return E_FAIL;
-	pShader->Add_InputElement("POSITION", DXGI_FORMAT_R32G32B32_FLOAT, sizeof(float) * 3);
-
-	pShader = m_pShaderMgr->Add_Shader(L"PS", L"../Binary/Shaders/color.hlsl", nullptr, "PS", "ps_5_1");
-	if (!pShader) return E_FAIL;
-
-	// 파이프라인 생성
-	if (FAILED(m_pShaderMgr->Add_PipelineState(L"Test", L"VS", L"PS")))
+	// Pipeline State
+	VEC_INPUTELEMENT tmp =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
+	};
+	if (FAILED(m_pShaderMgr->Add_PipelineState(L"Color", L"..\\Binary\\Shaders\\Test.hlsl", L"..\\Binary\\Shaders\\Test.hlsl", "VS", "PS", "vs_5_0", "ps_5_0", &tmp)))
 		return E_FAIL;
 
 	return NOERROR;
@@ -101,7 +93,6 @@ HRESULT CMainGame::Ready_Shader()
 
 VOID CMainGame::Release()
 {
-	m_pShaderMgr->DestroyInstance();
 	m_pDeviceMgr->DestroyInstance();
 }
 

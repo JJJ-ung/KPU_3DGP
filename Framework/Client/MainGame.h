@@ -1,5 +1,7 @@
 #pragma once
 
+class CMesh;
+
 class CInputMgr;
 class CDeviceMgr;
 class CShaderMgr;
@@ -20,6 +22,7 @@ private:
 	HRESULT Ready_Shader();
 
 private:
+	CMesh* m_pTest = nullptr;
 	CDeviceMgr* m_pDeviceMgr = nullptr;
 	CShaderMgr* m_pShaderMgr = nullptr;
 

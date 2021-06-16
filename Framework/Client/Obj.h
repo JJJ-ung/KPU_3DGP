@@ -10,6 +10,7 @@ public:
 public:
 	virtual HRESULT Initialize();
 	virtual INT Update(const FLOAT& fTimeDelta);
+	virtual INT LateUpdate(const FLOAT& fTimeDelta);
 	virtual VOID Render();
 
 protected:

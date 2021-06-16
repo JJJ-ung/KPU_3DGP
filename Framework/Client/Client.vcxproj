@@ -147,8 +147,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="CShaderMgr.h" />
     <ClInclude Include="DeviceMgr.h" />
     <ClInclude Include="FrameMgr.h" />
     <ClInclude Include="framework.h" />
@@ -158,22 +160,22 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Obj.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="ShaderMgr.h" />
     <ClInclude Include="SubMesh.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="CShaderMgr.cpp" />
     <ClCompile Include="DeviceMgr.cpp" />
     <ClCompile Include="FrameMgr.cpp" />
     <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Obj.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="ShaderMgr.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

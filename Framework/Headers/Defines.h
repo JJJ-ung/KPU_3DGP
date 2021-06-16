@@ -14,6 +14,7 @@
 #include <list>
 #include <set>
 #include <map>
+#include <array>
 #include <vector>
 #include <algorithm>
 #include <functional>

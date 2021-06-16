@@ -19,6 +19,11 @@ INT CComponent::Update(const FLOAT& fTimeDelta)
 	return 0;
 }
 
+INT CComponent::LateUpdate(const FLOAT& fTimeDelta)
+{
+	return 0;
+}
+
 VOID CComponent::Render()
 {
 	return VOID();

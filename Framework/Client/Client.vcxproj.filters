@@ -61,9 +61,6 @@
     <Filter Include="97 Rendering\00 ShaderManager">
       <UniqueIdentifier>{d4c8b592-6bd5-4108-8e88-108516eca707}</UniqueIdentifier>
     </Filter>
-    <Filter Include="97 Rendering\00 ShaderManager\Shader">
-      <UniqueIdentifier>{7b62e45f-a6b0-4a1d-9063-b671efb22a14}</UniqueIdentifier>
-    </Filter>
     <Filter Include="97 Rendering\01 LightManager">
       <UniqueIdentifier>{3f62b2e5-d697-46a1-b11c-f32ba3cc2b77}</UniqueIdentifier>
     </Filter>
@@ -123,12 +120,6 @@
     <ClInclude Include="DeviceMgr.h">
       <Filter>98 System\00 GraphicDevice</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>97 Rendering\00 ShaderManager\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderMgr.h">
-      <Filter>97 Rendering\00 ShaderManager</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>02 Component\00 Mesh</Filter>
     </ClInclude>
@@ -137,6 +128,15 @@
     </ClInclude>
     <ClInclude Include="SubMesh.h">
       <Filter>02 Component\00 Mesh\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CShaderMgr.h">
+      <Filter>97 Rendering\00 ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>01 GameObj\97 Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>02 Component\02 Transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,14 +174,17 @@
     <ClCompile Include="DeviceMgr.cpp">
       <Filter>98 System\00 GraphicDevice</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>97 Rendering\00 ShaderManager\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderMgr.cpp">
-      <Filter>97 Rendering\00 ShaderManager</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>02 Component\00 Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="CShaderMgr.cpp">
+      <Filter>97 Rendering\00 ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>01 GameObj\97 Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>02 Component\02 Transform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -25,6 +25,11 @@ INT CObj::Update(const FLOAT& fTimeDelta)
 	return 0;
 }
 
+INT CObj::LateUpdate(const FLOAT& fTimeDelta)
+{
+	return 0;
+}
+
 VOID CObj::Render()
 {
 	return VOID();

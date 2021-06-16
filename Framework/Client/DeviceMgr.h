@@ -14,9 +14,6 @@ public:
 	ID3D12GraphicsCommandList* Get_CommandLst() const { return m_pCommandLst; }
 
 public:
-	HRESULT Set_RootSignature(ID3D12RootSignature* pRootSig) { if (!pRootSig) return E_FAIL; m_pRootSignature = pRootSig; }
-
-public:
 	HRESULT Reset_CommandAlloc() { return m_pCommandAlloc->Reset(); }
 	HRESULT Reset_CommandLst() { return m_pCommandLst->Reset(m_pCommandAlloc, nullptr); }
 
@@ -34,9 +31,6 @@ public:
 	HRESULT Init_DepthStencil();
 
 public:
-	// 그리기 명령을 제출하기 전에 파이프라인에 묶어야 할 자원들이 무엇이고 그 자원들이 쉐이더 입력 레지스터들에 어떻게 대응되는지를 정의한다
-	HRESULT Set_RootParameter(D3D12_ROOT_SIGNATURE_DESC tRootDesc);
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC Create_PipelineDesc(CShader* pVertexShader, CShader* pPixelShader);
 
 private:
 	HRESULT Wait_GPU();
@@ -75,8 +69,9 @@ private:
 	HANDLE													m_hFenceEvent = nullptr;
 
 private:
+	D3D12_RECT										m_tScissorRect{ 0, 0, g_nWinCX, g_nWinCY };
+	D3D12_VIEWPORT								m_tViewport{ 0, 0, g_nWinCX, g_nWinCY,0, 1 };
 	D3D12_RESOURCE_BARRIER			m_tResourceBarr = {};
-	ID3D12RootSignature*						m_pRootSignature = nullptr;
 
 private:
 	FLOAT													m_vClearCol[4] = {};
