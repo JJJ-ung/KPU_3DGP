@@ -20,6 +20,7 @@ CShaderMgr::CShaderMgr()
 
 CShaderMgr::~CShaderMgr()
 {
+	for_each(m_mapPipelineState.begin(), m_mapPipelineState.end(), [](pair<wstring, ID3D12PipelineState*> p) { SafeRelease(p.second); });
 }
 
 HRESULT CShaderMgr::Set_RootSignature(UINT iParam, D3D12_ROOT_PARAMETER* pParam, UINT iDesc, D3D12_STATIC_SAMPLER_DESC* pDesc)

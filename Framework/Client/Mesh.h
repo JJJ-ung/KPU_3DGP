@@ -1,5 +1,13 @@
 #pragma once
 #include "Component.h"
+
+struct TEST
+{
+	XMFLOAT4X4 mat;
+	XMFLOAT4 color1;
+	XMFLOAT4 color2;
+};
+
 class CSubMesh;
 class CMesh : public CComponent
 {
@@ -19,6 +27,20 @@ private:
 	vector<VEC3> vp;	
 	vector<VEC2> vt;	
 	vector<VEC3> vn;
+	vector<uint16_t> idx;
+
+private:
+	XMVECTOR m_vEye{}, m_vAt{}, m_vUp{};
+	FLOAT m_fFovY = 0.f, m_fAspect = 0.f, m_fNear = 0.f, m_fFar = 0.f;
+	FLOAT m_fDistance = 1.f;
+
+private:
+	XMMATRIX m_matWorld{};
+	XMMATRIX m_matView{};
+	XMMATRIX m_matProj{};
+
+	D3D12_VERTEX_BUFFER_VIEW vbv;
+	D3D12_INDEX_BUFFER_VIEW ibv;
 
 private:
 	map<string, CSubMesh*> m_mapMesh;

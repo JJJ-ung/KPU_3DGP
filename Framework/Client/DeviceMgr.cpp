@@ -12,6 +12,14 @@ CDeviceMgr::~CDeviceMgr()
 	Release();
 }
 
+HRESULT CDeviceMgr::Close_CommandLst()
+{
+	if (FAILED(m_pCommandLst->Close())) return E_FAIL;
+	ID3D12CommandList* pCmdLst[] = { m_pCommandLst };
+	m_pCommandQueue->ExecuteCommandLists(_countof(pCmdLst), pCmdLst);
+	return NOERROR;
+}
+
 HRESULT CDeviceMgr::Init_GraphicDevice(VEC4 vBackCol)
 {
 	if (FAILED(Init_D3DDevice()))
@@ -64,11 +72,8 @@ HRESULT CDeviceMgr::RenderEnd()
 	m_tResourceBarr.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	m_pCommandLst->ResourceBarrier(1, &m_tResourceBarr);
 
-	if (FAILED(m_pCommandLst->Close()))
+	if (FAILED(Close_CommandLst()))
 		return E_FAIL;
-
-	ID3D12CommandList* pCmdLst[] = { m_pCommandLst };
-	m_pCommandQueue->ExecuteCommandLists(1, pCmdLst);
 
 	Wait_GPU();
 
@@ -274,6 +279,43 @@ HRESULT CDeviceMgr::Init_DepthStencil()
 	m_pDevice->CreateDepthStencilView(m_pDepthStencilBuff, &tDSVDesc, tDescHwnd);
 
 	return NOERROR;
+}
+
+ID3D12Resource* CDeviceMgr::Create_DefaultBuffer(const void* pInitData, UINT64 iByteSize, ID3D12Resource* pUploadBuffer)
+{
+	if (!m_pDevice | !m_pCommandLst)
+		return nullptr;
+
+	ID3D12Resource* pDefaultBuffer = nullptr;
+
+	// 실제 버퍼 자원
+	auto Prop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	auto Desc = CD3DX12_RESOURCE_DESC::Buffer(iByteSize);
+	if (FAILED(m_pDevice->CreateCommittedResource(&Prop, D3D12_HEAP_FLAG_NONE, 
+		&Desc, D3D12_RESOURCE_STATE_COMMON, nullptr, IID_PPV_ARGS(&pDefaultBuffer))))
+		return nullptr;
+
+	// 임시 업로드 힙 (CPU 메모리의 자료를 버퍼에 복사하기 위해서)
+	Prop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	Desc = CD3DX12_RESOURCE_DESC::Buffer(iByteSize);
+	if (FAILED(m_pDevice->CreateCommittedResource(&Prop, D3D12_HEAP_FLAG_NONE,
+		&Desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&pUploadBuffer))))
+		return nullptr;
+
+	// 복사할 자료에 대한 설정
+	D3D12_SUBRESOURCE_DATA tSubResourceData{};
+	tSubResourceData.pData = pInitData;
+	tSubResourceData.RowPitch = iByteSize;
+	tSubResourceData.SlicePitch = tSubResourceData.RowPitch;
+
+	// 자료 복사 요청
+	auto Barr = CD3DX12_RESOURCE_BARRIER::Transition(pDefaultBuffer, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST);
+	m_pCommandLst->ResourceBarrier(1, &Barr);
+	UpdateSubresources<1>(m_pCommandLst, pDefaultBuffer, pUploadBuffer, 0, 0, 1, &tSubResourceData);
+	Barr = CD3DX12_RESOURCE_BARRIER::Transition(pDefaultBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ);
+	m_pCommandLst->ResourceBarrier(1, &Barr);
+
+	return pDefaultBuffer;
 }
 
 HRESULT CDeviceMgr::Wait_GPU()

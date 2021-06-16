@@ -16,9 +16,12 @@ public:
 public:
 	HRESULT Reset_CommandAlloc() { return m_pCommandAlloc->Reset(); }
 	HRESULT Reset_CommandLst() { return m_pCommandLst->Reset(m_pCommandAlloc, nullptr); }
+	HRESULT Close_CommandLst();
 
 public:
 	HRESULT Init_GraphicDevice(VEC4 vBackCol);
+
+public:
 	HRESULT RenderBegin();
 	HRESULT RenderEnd();
 
@@ -31,8 +34,9 @@ public:
 	HRESULT Init_DepthStencil();
 
 public:
+	ID3D12Resource* Create_DefaultBuffer(const void* pInitData, UINT64 iByteSize, ID3D12Resource* pUploadBuffer);
 
-private:
+public:
 	HRESULT Wait_GPU();
 
 private:

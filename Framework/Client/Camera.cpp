@@ -26,21 +26,19 @@ HRESULT CCamera::Initialize(CObj* pOwner)
 	m_vEye = { 0.f, 1.f, -1.f, 1.f };
 	m_vAt = { 0.f, 0.f, 0.f, 1.f };
 	m_vUp = { 0.f, 1.f, 0.f, 0.f };
+	m_matView = XMMatrixLookAtLH(m_vEye, m_vAt, m_vUp);
 
 	return NOERROR;
 }
 
 INT CCamera::Update(const FLOAT& fTimeDelta)
 {
-	m_matView = XMMatrixLookAtLH(m_vEye, m_vAt, m_vUp);
 
 	return 0;
 }
 
 INT CCamera::LateUpdate(const FLOAT& fTimeDelta)
 {
-
-
 	return 0;
 }
 
