@@ -12,6 +12,8 @@ public:
 	ID3D12Device* Get_Device() const { return m_pDevice; }
 	ID3D12CommandAllocator* Get_CommandAlloc() const { return m_pCommandAlloc; }
 	ID3D12GraphicsCommandList* Get_CommandLst() const { return m_pCommandLst; }
+	ID3D12DescriptorHeap* Get_SrvHeap() const { return m_pSrvDescHeap; }
+	UINT Get_SrvSize() { return m_iSrvDescSize; }
 
 public:
 	HRESULT Reset_CommandAlloc() { return m_pCommandAlloc->Reset(); }
@@ -32,6 +34,9 @@ public:
 	HRESULT Init_DescriptorHeap();
 	HRESULT Init_RenderTarget();
 	HRESULT Init_DepthStencil();
+
+public:
+	VOID Resize();
 
 public:
 	ID3D12Resource* Create_DefaultBuffer(const void* pInitData, UINT64 iByteSize, ID3D12Resource* pUploadBuffer);
@@ -76,6 +81,10 @@ private:
 	D3D12_RECT										m_tScissorRect{ 0, 0, g_nWinCX, g_nWinCY };
 	D3D12_VIEWPORT								m_tViewport{ 0, 0, g_nWinCX, g_nWinCY,0, 1 };
 	D3D12_RESOURCE_BARRIER			m_tResourceBarr = {};
+
+private:
+	ID3D12DescriptorHeap*					m_pSrvDescHeap = nullptr;
+	UINT														m_iSrvDescSize = 0;
 
 private:
 	FLOAT													m_vClearCol[4] = {};

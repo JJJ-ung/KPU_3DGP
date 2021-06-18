@@ -1,36 +1,45 @@
 #pragma once
-
-struct Vertex
-{
-public:
-	Vertex() {}
-	Vertex(VEC3 vp, VEC2 vt, VEC3 vn)
-		: v(vp), uv(vt), n(vn)	{}
-	VEC3 v;
-	VEC2 uv;
-	VEC3 n;
-};
-
-struct Face
-{
-public:
-	Face() {}
-	Face(UINT vp, UINT vt, UINT vn)
-		: v(vp), uv(vt), n(vn) {}
-	UINT v;
-	UINT uv;
-	UINT n;
-};
-
 class CMaterial;
+class CDeviceMgr;
 class CSubMesh
 {
 public:
-	CSubMesh() {}
-	~CSubMesh() {}
+	typedef struct tagVertex
+	{
+		tagVertex() {}
+		tagVertex(XMFLOAT3 p, XMFLOAT2 t, XMFLOAT3 n)
+			: vp(p), vt(t), vn(n) {}
+		XMFLOAT3 vp;
+		XMFLOAT2 vt;
+		XMFLOAT3 vn;
+	}VERTEX;
 
 public:
-	vector<Vertex> vertices;
-	vector<Face> indices;
-	CMaterial* material = nullptr;
+	CSubMesh();
+	~CSubMesh();
+
+public:
+	vector<VERTEX>& Get_Vertices() { return vertices; }
+
+public:
+	VOID Render(ID3D12GraphicsCommandList* pCommandList);
+
+public:
+	HRESULT Init_BufferView();
+	HRESULT Add_Vertex(XMFLOAT3 p, XMFLOAT2 t, XMFLOAT3 n);
+	HRESULT Add_Material(CMaterial* pMat);
+
+private:
+	vector<VERTEX> vertices{};
+	D3D12_VERTEX_BUFFER_VIEW vbv;
+
+private:
+	CMaterial* m_pMaterial = nullptr;
+
+private:
+	CDeviceMgr* m_pDeviceMgr = nullptr;
+
+public:
+	virtual HRESULT Release();
+	static CSubMesh* Create();
 };

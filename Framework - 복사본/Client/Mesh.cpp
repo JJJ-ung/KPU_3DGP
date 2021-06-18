@@ -27,24 +27,32 @@ HRESULT CMesh::Initialize(const string& strPath, const wstring& strPipelineKey)
 	if (!m_pPipelineState)
 		return E_FAIL;
 
-	const UINT64 iByteSize = vp.size() * sizeof(VEC3);
+	//const UINT64 iByteSize = vp.size() * sizeof(VEC3);
+	//ID3D12Resource* pVertexBufferGPU = nullptr;
+	//ID3D12Resource* pVertexBufferUploader = nullptr;
+	//pVertexBufferGPU = m_pDeviceMgr->Create_DefaultBuffer(vp.data(), iByteSize, pVertexBufferUploader);
+	//vbv.BufferLocation = pVertexBufferGPU->GetGPUVirtualAddress();
+	//vbv.StrideInBytes = sizeof(VEC3);								// 한 정점 원소의 크기
+	//vbv.SizeInBytes = (UINT)vp.size() * sizeof(VEC3);			// 버퍼의 총 크기
+
+	//const UINT64 iByteSize2 = idx.size() * sizeof(uint16_t);
+	//ID3D12Resource* pIndexBufferGPU = nullptr;
+	//ID3D12Resource* pIndexBufferUploader = nullptr;
+	//pIndexBufferGPU = m_pDeviceMgr->Create_DefaultBuffer(idx.data(), iByteSize2, pIndexBufferUploader);
+	//ibv.BufferLocation = pIndexBufferGPU->GetGPUVirtualAddress();
+	//ibv.Format = DXGI_FORMAT_R16_UINT;
+	//ibv.SizeInBytes = iByteSize2;
+
+	const UINT64 iByteSize = vtx.size() * sizeof(VEC3);
 	ID3D12Resource* pVertexBufferGPU = nullptr;
 	ID3D12Resource* pVertexBufferUploader = nullptr;
-	pVertexBufferGPU = m_pDeviceMgr->Create_DefaultBuffer(vp.data(), iByteSize, pVertexBufferUploader);
+	pVertexBufferGPU = m_pDeviceMgr->Create_DefaultBuffer(vtx.data(), iByteSize, pVertexBufferUploader);
 	vbv.BufferLocation = pVertexBufferGPU->GetGPUVirtualAddress();
 	vbv.StrideInBytes = sizeof(VEC3);								// 한 정점 원소의 크기
-	vbv.SizeInBytes = (UINT)vp.size() * sizeof(VEC3);			// 버퍼의 총 크기
+	vbv.SizeInBytes = (UINT)vtx.size() * sizeof(VEC3);			// 버퍼의 총 크기
 
-	const UINT64 iByteSize2 = idx.size() * sizeof(uint16_t);
-	ID3D12Resource* pIndexBufferGPU = nullptr;
-	ID3D12Resource* pIndexBufferUploader = nullptr;
-	pIndexBufferGPU = m_pDeviceMgr->Create_DefaultBuffer(idx.data(), iByteSize2, pIndexBufferUploader);
-	ibv.BufferLocation = pIndexBufferGPU->GetGPUVirtualAddress();
-	ibv.Format = DXGI_FORMAT_R16_UINT;
-	ibv.SizeInBytes = iByteSize2;
-
-	m_fFovY = XMConvertToRadians(60.f);
-	m_fAspect = float(g_nWinCX / g_nWinCY);
+	m_fFovY = XMConvertToRadians(45.f);
+	m_fAspect = float(g_nWinCX) / g_nWinCY;
 	m_fNear = 0.1f;
 	m_fFar = 1000.f;
 	m_matProj = XMMatrixPerspectiveFovLH(m_fFovY, m_fAspect, m_fNear, m_fFar);
@@ -73,6 +81,24 @@ INT CMesh::Update(const FLOAT& fTimeDelta)
 		m_vAt += XMVECTOR{ 0.f, -1.f * fTimeDelta, 0.f, 0.f };
 	}
 
+	if (CInputMgr::GetInstance()->KeyPressing(KEY_ENTER))
+	{
+		angle += fTimeDelta * 180.f;
+		m_matWorld = XMMatrixScaling(1, 1, 1) * XMMatrixRotationX(XMConvertToRadians(angle)) * XMMatrixIdentity();
+	}
+
+	if (CInputMgr::GetInstance()->KeyPressing(KEY_A))
+	{
+		angle += fTimeDelta * 180.f;
+		m_matWorld = XMMatrixScaling(1, 1, 1) * XMMatrixRotationY(XMConvertToRadians(angle)) * XMMatrixIdentity();
+	}
+
+	if (CInputMgr::GetInstance()->KeyPressing(KEY_D))
+	{
+		angle += fTimeDelta * -180.f;
+		m_matWorld = XMMatrixScaling(1, 1, 1) * XMMatrixRotationY(XMConvertToRadians(angle)) * XMMatrixIdentity();
+	}
+
 	return 0;
 }
 
@@ -99,10 +125,10 @@ VOID CMesh::Render()
 	//commandList->IASetIndexBuffer()
 
 	commandList->IASetVertexBuffers(0, 1, &vbv);
-	commandList->IASetIndexBuffer(&ibv);
+	//commandList->IASetIndexBuffer(&ibv);
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//commandList->DrawInstanced(3, 1, 0, 0);
-	commandList->DrawIndexedInstanced(idx.size(), 1, 0, 0, 0);
+	commandList->DrawInstanced(vtx.size(), 1, 0, 0);
+	//commandList->DrawIndexedInstanced(idx.size(), 1, 0, 0, 0);
 }
 
 HRESULT CMesh::Load_Mesh(const string& strPath)
@@ -162,6 +188,7 @@ HRESULT CMesh::Load_Mesh(const string& strPath)
 				submesh->vertices.push_back(Vertex(vp[iv - 1], vt[ivt - 1], vn[ivn - 1]));
 				submesh->indices.push_back(Face(iv - 1, ivt - 1, ivn - 1));
 				idx.push_back(iv - 1);
+				vtx.push_back(vp[iv - 1]);
 			}
 		}
 	}

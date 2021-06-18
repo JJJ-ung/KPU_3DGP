@@ -34,9 +34,6 @@
     <Filter Include="01 GameObj\99 Terrain">
       <UniqueIdentifier>{11bc0220-7559-47f6-bff7-43dada93abae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03 Scene\99 Manager">
-      <UniqueIdentifier>{530a9383-2dc1-4e1c-b76b-14c21f0c11ac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03 Scene\00 Logo">
       <UniqueIdentifier>{dabb4ed1-86f8-4e0a-84e8-2dccee227c92}</UniqueIdentifier>
     </Filter>
@@ -70,23 +67,20 @@
     <Filter Include="97 Rendering\01 LightManager\PointLight">
       <UniqueIdentifier>{3553dd53-4a51-472b-91e6-4d974efe083d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="97 Rendering\99 RenderManager">
-      <UniqueIdentifier>{54ec7694-39b3-4ce1-9d7f-01886314714c}</UniqueIdentifier>
+    <Filter Include="97 Rendering\02 TextureLoader">
+      <UniqueIdentifier>{06b3f58a-f9b3-498b-bbff-5a8886659587}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02 Component\00 Mesh">
-      <UniqueIdentifier>{99df323d-9cb9-4df7-8d81-d91c54d5fbf3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02 Component\01 Texture">
-      <UniqueIdentifier>{b4e698c9-ca67-4fcc-a0c5-de67bd6afda9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02 Component\02 Transform">
+    <Filter Include="02 Component\01 Transform">
       <UniqueIdentifier>{2a2ba331-3cb3-44d5-854f-31fa6a535a5b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02 Component\03 Collider">
-      <UniqueIdentifier>{65634a61-79c7-40d6-856f-ab8e48c0c848}</UniqueIdentifier>
+    <Filter Include="02 Component\00 StaticMesh">
+      <UniqueIdentifier>{99df323d-9cb9-4df7-8d81-d91c54d5fbf3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02 Component\00 Mesh\Components">
-      <UniqueIdentifier>{093ad64b-1d5a-4f08-b43f-90b741e4e410}</UniqueIdentifier>
+    <Filter Include="02 Component\00 StaticMesh\SubMesh">
+      <UniqueIdentifier>{087ad02b-aa19-477f-a9a4-c76c2cd3dd3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Component\00 StaticMesh\Material">
+      <UniqueIdentifier>{ac0e27fb-ce99-4df8-b8c9-77553bdf830c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -120,15 +114,6 @@
     <ClInclude Include="DeviceMgr.h">
       <Filter>98 System\00 GraphicDevice</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>02 Component\00 Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>02 Component\00 Mesh\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="SubMesh.h">
-      <Filter>02 Component\00 Mesh\Components</Filter>
-    </ClInclude>
     <ClInclude Include="CShaderMgr.h">
       <Filter>97 Rendering\00 ShaderManager</Filter>
     </ClInclude>
@@ -136,7 +121,37 @@
       <Filter>01 GameObj\97 Camera</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>02 Component\02 Transform</Filter>
+      <Filter>02 Component\01 Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>01 GameObj\00 Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>03 Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMgr.h">
+      <Filter>98 System\99 GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Logo.h">
+      <Filter>03 Scene\00 Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Stage.h">
+      <Filter>03 Scene\01 Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTextureLoader.h">
+      <Filter>97 Rendering\02 TextureLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="SubMesh.h">
+      <Filter>02 Component\00 StaticMesh\SubMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMesh.h">
+      <Filter>02 Component\00 StaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>02 Component\00 StaticMesh\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="UploadBuffer.h">
+      <Filter>97 Rendering\00 ShaderManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +189,6 @@
     <ClCompile Include="DeviceMgr.cpp">
       <Filter>98 System\00 GraphicDevice</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>02 Component\00 Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="CShaderMgr.cpp">
       <Filter>97 Rendering\00 ShaderManager</Filter>
     </ClCompile>
@@ -184,7 +196,34 @@
       <Filter>01 GameObj\97 Camera</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>02 Component\02 Transform</Filter>
+      <Filter>02 Component\01 Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>01 GameObj\00 Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>03 Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMgr.cpp">
+      <Filter>98 System\99 GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Logo.cpp">
+      <Filter>03 Scene\00 Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Stage.cpp">
+      <Filter>03 Scene\01 Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="DDSTextureLoader.cpp">
+      <Filter>97 Rendering\02 TextureLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="SubMesh.cpp">
+      <Filter>02 Component\00 StaticMesh\SubMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp">
+      <Filter>02 Component\00 StaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>02 Component\00 StaticMesh\Material</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

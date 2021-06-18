@@ -1,8 +1,5 @@
 #pragma once
-
-class CMesh;
-
-class CInputMgr;
+class CGameMgr;
 class CDeviceMgr;
 class CShaderMgr;
 class CMainGame
@@ -22,7 +19,10 @@ private:
 	HRESULT Ready_Shader();
 
 private:
-	CMesh* m_pTest = nullptr;
+	array<CD3DX12_STATIC_SAMPLER_DESC, 6> Get_StaticSamplers();
+
+private:
+	CGameMgr* m_pGameMgr = nullptr;
 	CDeviceMgr* m_pDeviceMgr = nullptr;
 	CShaderMgr* m_pShaderMgr = nullptr;
 

@@ -40,6 +40,16 @@ HRESULT CShaderMgr::Set_RootSignature(UINT iParam, D3D12_ROOT_PARAMETER* pParam,
 	return NOERROR;
 }
 
+HRESULT CShaderMgr::Set_CBVUploadBuffer(bool bIsCBV)
+{
+	ID3D12Device* pDevice = CDeviceMgr::GetInstance()->Get_Device();
+	if (!pDevice) return E_FAIL;
+	m_pObjectCB = new UploadBuffer<tagObjInfo>(pDevice, 1, bIsCBV);
+	m_pLightCB = new UploadBuffer<tagLightInfo>(pDevice, 1, bIsCBV);
+	if (!m_pObjectCB | !m_pLightCB) return E_FAIL;
+	return NOERROR;
+}
+
 ComPtr<ID3DBlob> CompileShader(
 	const std::wstring& filename,
 	const D3D_SHADER_MACRO* defines,
@@ -84,6 +94,7 @@ HRESULT CShaderMgr::Add_PipelineState(const wstring strKey,
 	tDesc.VS = Compile_Shader(strVSPath, pDefines, strVSEntry, strVSTarget);
 	tDesc.PS = Compile_Shader(strPSPath, pDefines, strPSEntry, strPSTarget);
 	tDesc.PrimitiveTopologyType = ePrimitiveTopologyType;
+	tRasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 	tDesc.RasterizerState = tRasterizerDesc;
 
 	if (FAILED(CDeviceMgr::GetInstance()->Get_Device()->CreateGraphicsPipelineState(&tDesc, IID_PPV_ARGS(&m_mapPipelineState[strKey]))))

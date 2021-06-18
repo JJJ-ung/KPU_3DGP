@@ -12,8 +12,8 @@ newmtl torokko_yoshi_body
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka torokko_yoshi_body01a.png
-	map_Kd torokko_yoshi_body01a.png
+	map_Ka ../Binary/Resources/YoshiCart/torokko_yoshi_body01a.dds
+	map_Kd ../Binary/Resources/YoshiCart/torokko_yoshi_body01a.dds
 
 newmtl yoshi_eye
 	Ns 10.0000
@@ -26,5 +26,5 @@ newmtl yoshi_eye
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka yoshi_eye01a.png
-	map_Kd yoshi_eye01a.png
+	map_Ka ../Binary/Resources/YoshiCart/yoshi_eye01a.dds
+	map_Kd ../Binary/Resources/YoshiCart/yoshi_eye01a.dds

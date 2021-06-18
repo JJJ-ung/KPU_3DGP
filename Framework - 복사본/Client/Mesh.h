@@ -28,6 +28,7 @@ private:
 	vector<VEC2> vt;	
 	vector<VEC3> vn;
 	vector<uint16_t> idx;
+	vector<VEC3> vtx;
 
 private:
 	XMVECTOR m_vEye{}, m_vAt{}, m_vUp{};
@@ -45,6 +46,8 @@ private:
 private:
 	map<string, CSubMesh*> m_mapMesh;
 	ID3D12PipelineState* m_pPipelineState = nullptr;
+
+	float angle = 0.f;
 
 public:
 	virtual HRESULT Release();

@@ -1,6 +1,9 @@
 #pragma once
-
-class CInputMgr;
+#include "InputMgr.h"
+#include "GameMgr.h"
+#include "DeviceMgr.h"
+#include "CShaderMgr.h"
+class CComponent;
 class CObj
 {
 public:
@@ -13,11 +16,21 @@ public:
 	virtual INT LateUpdate(const FLOAT& fTimeDelta);
 	virtual VOID Render();
 
-protected:
-	CInputMgr* m_pInputMgr = nullptr;
+public:
+	HRESULT Add_Component(CComponent* pComponent);
 
 protected:
-	//list<Component*> m_lstComponent;
+	CInputMgr* m_pInputMgr = nullptr;
+	CGameMgr* m_pGameMgr = nullptr;
+	CDeviceMgr* m_pDeviceMgr = nullptr;
+	CShaderMgr* m_pShaderMgr = nullptr;
+
+protected:
+	list<CComponent*> m_lstComponent;
+
+protected:
+	ID3D12PipelineState* m_pPipelineState = nullptr;
+	ID3D12RootSignature* m_pRootSignature = nullptr;
 
 public:
 	virtual VOID Release();

@@ -33,6 +33,8 @@ HRESULT CDeviceMgr::Init_GraphicDevice(VEC4 vBackCol)
 	if (FAILED(Init_DepthStencil()))
 		return E_FAIL;
 
+	Resize();
+
 	memcpy(&m_vClearCol, &vBackCol, sizeof(VEC4));
 	m_tResourceBarr.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	m_tResourceBarr.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
@@ -58,6 +60,9 @@ HRESULT CDeviceMgr::RenderBegin()
 	D3D12_CPU_DESCRIPTOR_HANDLE tDsvDescHwnd = m_pDsvDescHeap->GetCPUDescriptorHandleForHeapStart();
 	m_pCommandLst->ClearDepthStencilView(tDsvDescHwnd, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 	m_pCommandLst->OMSetRenderTargets(1, &tRtvDescHwnd, TRUE, &tDsvDescHwnd);
+
+	ID3D12DescriptorHeap* descriptorHeaps[] = { m_pSrvDescHeap };
+	m_pCommandLst->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
 	m_pCommandLst->RSSetViewports(1, &m_tViewport);
 	m_pCommandLst->RSSetScissorRects(1, &m_tScissorRect);
@@ -96,10 +101,15 @@ HRESULT CDeviceMgr::RenderEnd()
 
 HRESULT CDeviceMgr::Init_SwapChain()
 {
+	RECT rcClient;
+	::GetClientRect(g_hWnd, &rcClient);
+	int ClientWidth = rcClient.right - rcClient.left;
+	int ClientHeight = rcClient.bottom - rcClient.top;
+
 	DXGI_SWAP_CHAIN_DESC tDesc = {};
 	tDesc.BufferCount = m_iSwapChainCnt;
-	tDesc.BufferDesc.Width = g_nWinCX;
-	tDesc.BufferDesc.Height = g_nWinCY;
+	tDesc.BufferDesc.Width = ClientWidth;
+	tDesc.BufferDesc.Height = ClientHeight;
 	tDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	tDesc.BufferDesc.RefreshRate.Numerator = 60;
 	tDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -210,7 +220,7 @@ HRESULT CDeviceMgr::Init_CommandQueue()
 HRESULT CDeviceMgr::Init_DescriptorHeap()
 {
 	D3D12_DESCRIPTOR_HEAP_DESC tDesc;
-	::ZeroMemory(&tDesc, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
+	ZeroMemory(&tDesc, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
 	tDesc.NumDescriptors = m_iSwapChainCnt;
 	tDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	tDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
@@ -224,6 +234,13 @@ HRESULT CDeviceMgr::Init_DescriptorHeap()
 	if (FAILED(m_pDevice->CreateDescriptorHeap(&tDesc, IID_PPV_ARGS(&m_pDsvDescHeap))))
 		return E_FAIL;
 	m_iDsvDescSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+
+	tDesc.NumDescriptors = TEXCNT;
+	tDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	tDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	if (FAILED(m_pDevice->CreateDescriptorHeap(&tDesc, IID_PPV_ARGS(&m_pSrvDescHeap))))
+		return E_FAIL;
+	m_iSrvDescSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	return NOERROR;
 }
@@ -279,6 +296,31 @@ HRESULT CDeviceMgr::Init_DepthStencil()
 	m_pDevice->CreateDepthStencilView(m_pDepthStencilBuff, &tDSVDesc, tDescHwnd);
 
 	return NOERROR;
+}
+
+VOID CDeviceMgr::Resize()
+{
+	Wait_GPU();
+
+	DXGI_MODE_DESC dxgiTargetParameters;
+	dxgiTargetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	dxgiTargetParameters.Width = g_nWinCX;
+	dxgiTargetParameters.Height = g_nWinCY;
+	dxgiTargetParameters.RefreshRate.Numerator = 60;
+	dxgiTargetParameters.RefreshRate.Denominator = 1;
+	dxgiTargetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	dxgiTargetParameters.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	m_pSwapChain->ResizeTarget(&dxgiTargetParameters);
+
+	for (int i = 0; i < m_iSwapChainCnt; i++) if (m_ppSwapChainBuff[i]) m_ppSwapChainBuff[i]->Release();
+
+	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
+	m_pSwapChain->GetDesc(&dxgiSwapChainDesc);
+	m_pSwapChain->ResizeBuffers(m_iSwapChainCnt, g_nWinCX, g_nWinCY, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
+
+	m_iSwapChainIdx = m_pSwapChain->GetCurrentBackBufferIndex();
+
+	Init_RenderTarget();
 }
 
 ID3D12Resource* CDeviceMgr::Create_DefaultBuffer(const void* pInitData, UINT64 iByteSize, ID3D12Resource* pUploadBuffer)

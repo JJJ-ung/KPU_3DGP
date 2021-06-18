@@ -29,7 +29,7 @@
 #include <mmsystem.h>
 #include <dinput.h>
 
-#include "Dx12.h"
+#include "d3dx12.h"
 
 #ifdef _DEBUG
 
@@ -83,3 +83,8 @@ extern HINSTANCE g_hInst;
 
 #define  NOEVENT 0
 #define  OBJDEAD 1 
+
+extern UINT BufferSlotSize[RootParam::END];
+
+extern UINT g_iTexIndex;
+#define TEXCNT 100

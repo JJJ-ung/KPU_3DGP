@@ -7,8 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{8E290C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headers", "Headers", "{A1BF5530-DC90-4A47-A6DA-C3BEA8D9B919}"
 	ProjectSection(SolutionItems) = preProject
+		Headers\d3dx12.h = Headers\d3dx12.h
 		Headers\Defines.h = Headers\Defines.h
-		Headers\Dx12.h = Headers\Dx12.h
 		Headers\Enum.h = Headers\Enum.h
 		Headers\Function.h = Headers\Function.h
 		Headers\Struct.h = Headers\Struct.h
@@ -20,7 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{DA90E5C8-B453-4653-9308-ED68EDA1E572}"
 	ProjectSection(SolutionItems) = preProject
 		Binary\Shaders\color.hlsl = Binary\Shaders\color.hlsl
-		Binary\Shaders\Test.hlsl = Binary\Shaders\Test.hlsl
+		Binary\Shaders\Default.hlsl = Binary\Shaders\Default.hlsl
 	EndProjectSection
 EndProject
 Global
