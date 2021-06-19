@@ -5,7 +5,7 @@ class CGameMgr
 {
 	DECLARE_SINGLETON(CGameMgr)
 public:
-	enum ObjID { BASE, PLAYER, END };
+	enum ObjID { BASE, MAP, PLAYER, CAMERA, END };
 
 private:
 	CGameMgr();

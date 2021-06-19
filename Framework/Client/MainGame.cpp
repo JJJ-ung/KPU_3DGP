@@ -86,6 +86,7 @@ HRESULT CMainGame::Ready_Shader()
 	slotRootParameter[RootParam::TEXTABLE].InitAsDescriptorTable(1, &texTable, D3D12_SHADER_VISIBILITY_PIXEL);
 	slotRootParameter[RootParam::OBJ].InitAsConstantBufferView(0);
 	slotRootParameter[RootParam::LIGHT].InitAsConstantBufferView(1);
+	slotRootParameter[RootParam::CONSTANT].InitAsConstants(20, 2);
 	//m_pShaderMgr->Get_CBVResources().push_back(nullptr)
 	//slotRootParameter[RootParam::OBJ].InitAsConstants(BufferSlotSize[RootParam::OBJ] = 49, 0);			// ObjInfo
 	//slotRootParameter[RootParam::LIGHT].InitAsConstants(BufferSlotSize[RootParam::LIGHT] = 4, 1);			// LightInfo

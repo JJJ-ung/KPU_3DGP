@@ -2,5 +2,5 @@
 
 namespace RootParam
 {
-	enum BufferSlot { TEXTABLE, OBJ, LIGHT, END };
+	enum BufferSlot { TEXTABLE, OBJ, LIGHT, CONSTANT, END };
 }

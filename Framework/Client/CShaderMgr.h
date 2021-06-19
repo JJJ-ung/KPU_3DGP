@@ -33,10 +33,6 @@ private:
 	map<wstring, ID3D12PipelineState*> m_mapPipelineState;
 
 private:
-	OBJINFO m_tMainObjInfo = {};
-	LIGHTINFO m_tMainLightInfo = {};
-
-private:
 	UploadBuffer<tagObjInfo>* m_pObjectCB = nullptr;
 	UploadBuffer<tagLightInfo>* m_pLightCB = nullptr;
 

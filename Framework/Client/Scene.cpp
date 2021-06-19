@@ -24,6 +24,10 @@ HRESULT CScene::Initialize()
 	if (!m_pInputMgr)
 		return E_FAIL;
 
+    m_pLightMgr = CLightMgr::GetInstance();
+    if (!m_pLightMgr)
+        return E_FAIL;
+
     return NOERROR;
 }
 

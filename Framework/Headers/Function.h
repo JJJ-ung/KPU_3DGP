@@ -30,8 +30,6 @@ private:									\
 #define IMPLEMENT_SINGLETON(ClassName)		\
 ClassName* ClassName::m_pInstance = nullptr;
 
-
-
 template <typename T>
 void SafeDelete(T& pointer)
 {

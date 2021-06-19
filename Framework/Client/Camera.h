@@ -7,25 +7,21 @@ public:
 	virtual ~CCamera();
 
 public:
-	virtual HRESULT Initialize(CObj* pOwner);
+	virtual HRESULT Initialize();
 	virtual INT Update(const FLOAT& fTimeDelta);
 	virtual INT LateUpdate(const FLOAT& fTimeDelta);
 	virtual VOID Render();
 
-private:
+protected:
 	XMVECTOR m_vEye{}, m_vAt{}, m_vUp{};
 	FLOAT m_fFovY = 0.f, m_fAspect = 0.f, m_fNear = 0.f, m_fFar = 0.f;
-	FLOAT m_fDistance = 1.f;
 
-private:
+protected:
 	XMMATRIX m_matView{};
 	XMMATRIX m_matProj{};
 
-private:
-	CObj* m_pOwner = nullptr;
-
 public:
 	virtual VOID Release();
-	static CCamera* Create(CObj* pOwner);
+	static CCamera* Create();
 };
 

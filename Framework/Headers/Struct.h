@@ -1,9 +1,13 @@
 #pragma once
 
-typedef struct tagObjInfo
+typedef struct tagConstantInfo
 {
 	XMFLOAT4 Color;
 	XMFLOAT4X4 World;
+}CONSTANTINFO;
+
+typedef struct tagObjInfo
+{
 	XMFLOAT4X4 View;
 	XMFLOAT4X4 Proj;
 }OBJINFO;

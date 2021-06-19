@@ -61,17 +61,8 @@
     <Filter Include="97 Rendering\01 LightManager">
       <UniqueIdentifier>{3f62b2e5-d697-46a1-b11c-f32ba3cc2b77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="97 Rendering\01 LightManager\DirectionalLight">
-      <UniqueIdentifier>{9e9e9589-0559-4baa-afea-6ee4d979ff5b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="97 Rendering\01 LightManager\PointLight">
-      <UniqueIdentifier>{3553dd53-4a51-472b-91e6-4d974efe083d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="97 Rendering\02 TextureLoader">
       <UniqueIdentifier>{06b3f58a-f9b3-498b-bbff-5a8886659587}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02 Component\01 Transform">
-      <UniqueIdentifier>{2a2ba331-3cb3-44d5-854f-31fa6a535a5b}</UniqueIdentifier>
     </Filter>
     <Filter Include="02 Component\00 StaticMesh">
       <UniqueIdentifier>{99df323d-9cb9-4df7-8d81-d91c54d5fbf3}</UniqueIdentifier>
@@ -81,6 +72,18 @@
     </Filter>
     <Filter Include="02 Component\00 StaticMesh\Material">
       <UniqueIdentifier>{ac0e27fb-ce99-4df8-b8c9-77553bdf830c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Component\01 Transform">
+      <UniqueIdentifier>{1caf0ae2-4162-4a38-89fe-fc81738c2618}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObj\97 Camera\00 FollowCamera">
+      <UniqueIdentifier>{1e01eac4-27cc-49f1-be6c-944c8231bcf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObj\97 Camera\01 FreeCamera">
+      <UniqueIdentifier>{1863a16a-dfd3-4fff-b211-ac28a7e42fcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObj\99 Terrain\00 RacingMap">
+      <UniqueIdentifier>{62175510-2d5d-4471-9377-a49c28c477c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +123,6 @@
     <ClInclude Include="Camera.h">
       <Filter>01 GameObj\97 Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>02 Component\01 Transform</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>01 GameObj\00 Player</Filter>
     </ClInclude>
@@ -152,6 +152,21 @@
     </ClInclude>
     <ClInclude Include="UploadBuffer.h">
       <Filter>97 Rendering\00 ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>02 Component\01 Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowCamera.h">
+      <Filter>01 GameObj\97 Camera\00 FollowCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeCamera.h">
+      <Filter>01 GameObj\97 Camera\01 FreeCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="LightMgr.h">
+      <Filter>97 Rendering\01 LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="RacingMap.h">
+      <Filter>01 GameObj\99 Terrain\00 RacingMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -195,9 +210,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>01 GameObj\97 Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>02 Component\01 Transform</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>01 GameObj\00 Player</Filter>
     </ClCompile>
@@ -224,6 +236,21 @@
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>02 Component\00 StaticMesh\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>02 Component\01 Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowCamera.cpp">
+      <Filter>01 GameObj\97 Camera\00 FollowCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeCamera.cpp">
+      <Filter>01 GameObj\97 Camera\01 FreeCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="LightMgr.cpp">
+      <Filter>97 Rendering\01 LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RacingMap.cpp">
+      <Filter>01 GameObj\99 Terrain\00 RacingMap</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

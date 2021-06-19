@@ -1,4 +1,5 @@
 #pragma once
+#include "LightMgr.h"
 #include "InputMgr.h"
 #include "GameMgr.h"
 #include "DeviceMgr.h"
@@ -13,6 +14,7 @@ public:
 	virtual INT Update(const FLOAT& fTimeDelta);
 
 protected:
+	CLightMgr* m_pLightMgr = nullptr;
 	CInputMgr* m_pInputMgr = nullptr;
 	CGameMgr* m_pGameMgr = nullptr;
 	CDeviceMgr* m_pDeviceMgr = nullptr;

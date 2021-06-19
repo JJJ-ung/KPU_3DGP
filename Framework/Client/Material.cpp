@@ -14,11 +14,27 @@ CMaterial::~CMaterial()
 
 HRESULT CMaterial::Load_MaterialInfo(UINT iIndex)
 {
-	m_iTexIndex = iIndex;
+	if (m_tMaterialInfo.map_Ka == L"" && m_tMaterialInfo.map_Kd == L"")
+		return NOERROR;
 
-	if (FAILED(CreateDDSTextureFromFile12(m_pDeviceMgr->Get_Device(), m_pDeviceMgr->Get_CommandLst(),
-		m_tMaterialInfo.map_Ka.c_str(), m_pTexture, m_pUploadHeap)))
-		return E_FAIL;
+	m_iTexIndex = iIndex;
+	++g_iTexIndex;
+
+	if (m_tMaterialInfo.map_Ka != L"")
+	{
+		if (FAILED(CreateDDSTextureFromFile12(m_pDeviceMgr->Get_Device(), m_pDeviceMgr->Get_CommandLst(),
+			m_tMaterialInfo.map_Ka.c_str(), m_pTexture, m_pUploadHeap)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (m_tMaterialInfo.map_Kd != L"")
+		{
+			if (FAILED(CreateDDSTextureFromFile12(m_pDeviceMgr->Get_Device(), m_pDeviceMgr->Get_CommandLst(),
+				m_tMaterialInfo.map_Kd.c_str(), m_pTexture, m_pUploadHeap)))
+				return E_FAIL;
+		}
+	}
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE hDescriptor;
 	hDescriptor.InitOffsetted(m_pDeviceMgr->Get_SrvHeap()->GetCPUDescriptorHandleForHeapStart(), iIndex, m_pDeviceMgr->Get_SrvSize());

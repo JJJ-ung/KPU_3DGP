@@ -102,6 +102,10 @@ void CInputMgr::UpdateKey()
 		m_dwCurKey |= KEY_A;
 	if (GetKeyState(DIK_D) & 0x80)
 		m_dwCurKey |= KEY_D;
+	if (GetKeyState(DIK_Q) & 0x80)
+		m_dwCurKey |= KEY_Q;
+	if (GetKeyState(DIK_E) & 0x80)
+		m_dwCurKey |= KEY_E;
 	if (GetKeyState(DIK_LSHIFT))
 		m_dwCurKey |= KEY_SHIFT;
 	if (GetKeyState(DIK_LCONTROL))

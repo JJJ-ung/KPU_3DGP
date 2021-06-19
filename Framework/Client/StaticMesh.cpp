@@ -187,7 +187,6 @@ HRESULT CStaticMesh::Load_MaterialFromFile(const string& strPath)
 	{
 		if (FAILED(p.second->Load_MaterialInfo(g_iTexIndex)))
 			return E_FAIL;
-		++g_iTexIndex;
 	}
 
 	return NOERROR;

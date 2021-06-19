@@ -1,14 +1,19 @@
 #pragma once
+#include "LightMgr.h"
 #include "InputMgr.h"
 #include "GameMgr.h"
 #include "DeviceMgr.h"
 #include "CShaderMgr.h"
+#include "Transform.h"
 class CComponent;
 class CObj
 {
 public:
 	explicit CObj();
 	virtual ~CObj();
+
+public:
+	CTransform* Get_Transform() { return m_pTransform; }
 
 public:
 	virtual HRESULT Initialize();
@@ -20,12 +25,16 @@ public:
 	HRESULT Add_Component(CComponent* pComponent);
 
 protected:
+	CLightMgr* m_pLightMgr = nullptr;
 	CInputMgr* m_pInputMgr = nullptr;
 	CGameMgr* m_pGameMgr = nullptr;
 	CDeviceMgr* m_pDeviceMgr = nullptr;
 	CShaderMgr* m_pShaderMgr = nullptr;
 
 protected:
+	OBJINFO m_tObjInfo = {};
+	CONSTANTINFO m_tConstInfo = {};
+	CTransform* m_pTransform = nullptr;
 	list<CComponent*> m_lstComponent;
 
 protected:

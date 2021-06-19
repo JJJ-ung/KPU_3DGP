@@ -2,8 +2,6 @@
 #include "Player.h"
 #include "StaticMesh.h"
 
-#include "DDSTextureLoader.h"
-
 CPlayer::CPlayer()
 {
 }
@@ -20,39 +18,35 @@ HRESULT CPlayer::Initialize()
 	m_pRootSignature = m_pShaderMgr->Get_RootSignature();
 	m_pPipelineState = m_pShaderMgr->Get_PipelineState(L"Default");
 
-	//if (FAILED(Add_Component(CStaticMesh::Create("../Binary/Resources/test.obj"))))
-	//	return E_FAIL;
-	//if (FAILED(Add_Component(CStaticMesh::Create("../Binary/Resources/Apple/Apple.obj"))))
-	//	return E_FAIL;
+	m_pTransform = CTransform::Create();
+
 	if (FAILED(Add_Component(CStaticMesh::Create("../Binary/Resources/YoshiCart/torokko_yoshi_body01a.obj"))))
 		return E_FAIL;
+
 	//if (FAILED(Add_Component(CStaticMesh::Create("../Binary/Resources/1Ho/1Ho.obj"))))
 	//	return E_FAIL;
-
-	//if (FAILED(CreateDDSTextureFromFile12(m_pDeviceMgr->Get_Device(), m_pDeviceMgr->Get_CommandLst(),
-	//	L"../Binary/Resources/1Ho/mBody_Alb.dds", m_pTexture, m_pUploadHeap)))
+	//if (FAILED(Add_Component(CStaticMesh::Create("../Binary/Resources/RainbowRoad/smkds_rainbowroad.obj"))))
 	//	return E_FAIL;
-
-	//CD3DX12_CPU_DESCRIPTOR_HANDLE hDescriptor(m_pDeviceMgr->Get_SrvHeap()->GetCPUDescriptorHandleForHeapStart());
-
-	//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	//srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//srvDesc.Format = m_pTexture->GetDesc().Format;
-	//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	//srvDesc.Texture2D.MostDetailedMip = 0;
-	//srvDesc.Texture2D.MipLevels = m_pTexture->GetDesc().MipLevels;
-	//srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
-
-	//m_pDeviceMgr->Get_Device()->CreateShaderResourceView(m_pTexture.Get(), &srvDesc, hDescriptor);
 
 	return NOERROR;
 }
 
 INT CPlayer::Update(const FLOAT& fTimeDelta)
 {
-	CObj::Update(fTimeDelta);
+	if (m_pInputMgr->KeyPressing(KEY_W))
+		m_pTransform->Move_Forward(fTimeDelta);
+	if (m_pInputMgr->KeyPressing(KEY_S))
+		m_pTransform->Move_Forward(-fTimeDelta);
+	if (m_pInputMgr->KeyPressing(KEY_D))
+		m_pTransform->Move_Right(fTimeDelta);
+	if (m_pInputMgr->KeyPressing(KEY_A))
+		m_pTransform->Move_Right(-fTimeDelta);
 
-	m_fAngle += fTimeDelta * 100.f;
+	LONG	MouseMove = 0;
+	if (MouseMove = m_pInputMgr->GetMouseMove(CInputMgr::DIMS_X))
+		m_pTransform->Rotate_Axis(XMVECTOR{ 0.f, 1.f, 0.f, 0.f }, XMConvertToRadians(MouseMove * fTimeDelta));
+
+	CObj::Update(fTimeDelta);
 
 	return 0;
 }
@@ -76,19 +70,20 @@ VOID CPlayer::Render()
 
 	XMMATRIX matView = m_pGameMgr->Get_View();
 	XMMATRIX matProj = m_pGameMgr->Get_Proj();
-	XMMATRIX matWorld = XMMatrixRotationY(XMConvertToRadians(m_fAngle));
+	XMMATRIX matWorld = m_pTransform->GetWorld();
 
-	OBJINFO tmp = {};
-	XMStoreFloat4x4(&tmp.World, XMMatrixTranspose(matWorld));
-	XMStoreFloat4x4(&tmp.View, XMMatrixTranspose(matView));
-	XMStoreFloat4x4(&tmp.Proj, XMMatrixTranspose(matProj));
+	XMStoreFloat4x4(&m_tConstInfo.World, XMMatrixTranspose(matWorld));
+	XMStoreFloat4x4(&m_tObjInfo.View, XMMatrixTranspose(matView));
+	XMStoreFloat4x4(&m_tObjInfo.Proj, XMMatrixTranspose(matProj));
 
-	m_pShaderMgr->Get_ObjCBV()->CopyData(0, tmp);
+	m_pShaderMgr->Get_ObjCBV()->CopyData(0, m_tObjInfo);
 
 	auto objCB = m_pShaderMgr->Get_ObjCBV()->Resource();
 	commandList->SetGraphicsRootConstantBufferView(RootParam::OBJ, objCB->GetGPUVirtualAddress());
 
-	//commandList->SetGraphicsRoot32BitConstants(RootParam::OBJ, BufferSlotSize[RootParam::OBJ], &tmp, 0);
+	commandList->SetGraphicsRoot32BitConstants(RootParam::CONSTANT, 20, &m_tConstInfo, 0);
+
+	m_pLightMgr->Set_LightCBV(commandList);
 
 	for (auto p : m_lstComponent)
 		p->Render();

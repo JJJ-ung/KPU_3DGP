@@ -3,8 +3,6 @@ SamplerState gLinear  : register(s0);
 
 cbuffer ObjInfo : register(b0)
 {
-	float4 gColor;
-	float4x4 gWorld;
 	float4x4 gView;
 	float4x4 gProj;
 };
@@ -16,6 +14,12 @@ cbuffer LightInfo : register(b1)
 	float4 gLightDiffuse[3];
 	float4 gLightAmbient[3];
 	float4 gLightSpecular[3];
+};
+
+cbuffer ConstInfo : register(b2)
+{
+	float4 gColor;
+	float4x4 gWorld;
 };
 
 struct VS_IN

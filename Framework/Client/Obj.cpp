@@ -1,7 +1,5 @@
 #include "framework.h"
 #include "Obj.h"
-
-#include "InputMgr.h"
 #include "Component.h"
 
 CObj::CObj()
@@ -28,6 +26,10 @@ HRESULT CObj::Initialize()
 
 	m_pShaderMgr = CShaderMgr::GetInstance();
 	if (!m_pShaderMgr)
+		return E_FAIL;
+
+	m_pLightMgr = CLightMgr::GetInstance();
+	if (!m_pLightMgr)
 		return E_FAIL;
 
 	return NOERROR;
