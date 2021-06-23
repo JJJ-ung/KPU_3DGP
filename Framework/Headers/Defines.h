@@ -88,3 +88,5 @@ extern UINT BufferSlotSize[RootParam::END];
 
 extern UINT g_iTexIndex;
 #define TEXCNT 100
+
+extern BOOL g_bColliderRender;

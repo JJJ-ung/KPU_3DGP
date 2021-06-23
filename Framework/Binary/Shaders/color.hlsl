@@ -32,7 +32,6 @@ struct VS_IN
 struct VS_OUT
 {
 	float4 Pos  : SV_POSITION;
-	float2 TexCoord : TEXCOORD;
 	float4 Color : COLOR;
 };
 
@@ -40,9 +39,10 @@ VS_OUT VS(VS_IN vin)
 {
 	VS_OUT vout;
 
-	vout.Pos = mul(float4(vin.vp, 1.0f), gWorldViewProj);
-
-	vout.TexCoord = vin.vt;
+	float4 vPos = mul(float4(vin.vp, 1.f), gWorld);
+	vPos = mul(vPos, gView);
+	vPos = mul(vPos, gProj);
+	vout.Pos = vPos;
 
 	vout.Color = gColor;
 

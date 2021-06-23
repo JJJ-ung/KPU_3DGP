@@ -13,9 +13,6 @@ public:
 	virtual VOID Render();
 
 private:
-	VOID Setup_CameraInfo();
-
-private:
 	XMVECTOR m_vOffset{};
 	FLOAT m_fDistance = 1.f;
 	CTransform* m_pTarget = nullptr;

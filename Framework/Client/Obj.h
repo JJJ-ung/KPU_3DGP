@@ -5,6 +5,7 @@
 #include "DeviceMgr.h"
 #include "CShaderMgr.h"
 #include "Transform.h"
+#include "Collision.h"
 class CComponent;
 class CObj
 {
@@ -36,6 +37,9 @@ protected:
 	CONSTANTINFO m_tConstInfo = {};
 	CTransform* m_pTransform = nullptr;
 	list<CComponent*> m_lstComponent;
+
+protected:
+	CCollision* m_pCollision = nullptr;
 
 protected:
 	ID3D12PipelineState* m_pPipelineState = nullptr;

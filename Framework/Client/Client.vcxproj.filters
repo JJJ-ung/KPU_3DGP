@@ -85,6 +85,15 @@
     <Filter Include="01 GameObj\99 Terrain\00 RacingMap">
       <UniqueIdentifier>{62175510-2d5d-4471-9377-a49c28c477c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01 GameObj\02 Bullet">
+      <UniqueIdentifier>{50cd0cfe-9770-432d-9931-6b32cc3def9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObj\01 Monster">
+      <UniqueIdentifier>{8c58cb05-cc80-4fb9-bb1a-219ddf944629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Component\02 Collision">
+      <UniqueIdentifier>{37403940-5005-423f-9c32-a2b983a7a0f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -167,6 +176,15 @@
     </ClInclude>
     <ClInclude Include="RacingMap.h">
       <Filter>01 GameObj\99 Terrain\00 RacingMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>01 GameObj\02 Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>01 GameObj\01 Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>02 Component\02 Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +269,15 @@
     </ClCompile>
     <ClCompile Include="RacingMap.cpp">
       <Filter>01 GameObj\99 Terrain\00 RacingMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>01 GameObj\02 Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>01 GameObj\01 Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>02 Component\02 Collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

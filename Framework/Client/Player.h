@@ -13,6 +13,13 @@ public:
 	virtual VOID Render();
 
 public:
+	VOID KeyInput(const FLOAT& fTimeDelta);
+
+private:
+	BOOL m_bKnockBack;
+	XMVECTOR m_vBeginPos;
+
+public:
 	virtual VOID Release();
 	static CPlayer* Create();
 };

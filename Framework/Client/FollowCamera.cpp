@@ -22,20 +22,38 @@ HRESULT CFollowCamera::Initialize(CTransform* pTarget, XMVECTOR vOffset, FLOAT f
 	m_vOffset = vOffset;
 	m_fDistance = fDistance;
 
-	Setup_CameraInfo();
+	XMVECTOR vTargetPos = m_pTarget->GetState(CTransform::POSITION);
+	XMVECTOR vTargetDir = XMVectorLerp(m_pTransform->GetState(CTransform::LOOK), m_pTarget->GetState(CTransform::LOOK), 0.3f);
+
+	XMVECTOR vDir = XMVectorSetW(XMVector3Normalize(vTargetDir * -1.f), 0.f);
+
+	m_vAt = vTargetPos;
+	m_vEye = XMVectorSetW(vTargetPos + vDir * m_fDistance + m_vOffset, 1.f);
+
+	m_pTransform->SetState(CTransform::POSITION, m_vEye);
+
+	m_pTransform->Rotate_LookAt(vTargetPos);
+
+	m_matView = XMMatrixInverse(nullptr, m_pTransform->GetWorld());
 
 	return NOERROR;
 }
 
 INT CFollowCamera::Update(const FLOAT& fTimeDelta)
 {
-	Setup_CameraInfo();
+	XMVECTOR vTargetPos = m_pTarget->GetState(CTransform::POSITION);
+	XMVECTOR vTargetDir = XMVectorLerp(m_pTransform->GetState(CTransform::LOOK), m_pTarget->GetState(CTransform::LOOK), 0.3f);
 
-	POINT		ptCursorPos = { g_nWinCX >> 1, g_nWinCY >> 1 };
+	XMVECTOR vDir = XMVectorSetW(XMVector3Normalize(vTargetDir * -1.f), 0.f);
 
-	ClientToScreen(g_hWnd, &ptCursorPos);
+	m_vAt = vTargetPos;
+	m_vEye = XMVectorSetW(vTargetPos + vDir * m_fDistance + m_vOffset, 1.f);
 
-	SetCursorPos(ptCursorPos.x, ptCursorPos.y);
+	m_pTransform->SetState(CTransform::POSITION, m_vEye);
+
+	m_pTransform->Rotate_LookAt(vTargetPos);
+
+	m_matView = XMMatrixInverse(nullptr, m_pTransform->GetWorld());
 
 	return 0;
 }
@@ -50,23 +68,6 @@ INT CFollowCamera::LateUpdate(const FLOAT& fTimeDelta)
 VOID CFollowCamera::Render()
 {
 	return VOID();
-}
-
-VOID CFollowCamera::Setup_CameraInfo()
-{
-	XMVECTOR vTargetPos = m_pTarget->GetState(CTransform::POSITION);
-	XMVECTOR vTargetDir = m_pTarget->GetState(CTransform::LOOK);
-
-	XMVECTOR vDir = XMVectorSetW(XMVector3Normalize(vTargetDir * -1.f), 0.f);
-
-	m_vAt = vTargetPos;
-	m_vEye = XMVectorSetW(vTargetPos + vDir * m_fDistance + m_vOffset, 1.f);
-
-	m_pTransform->SetState(CTransform::POSITION, m_vEye);
-
-	m_pTransform->Rotate_LookAt(vTargetPos);
-
-	m_matView = XMMatrixInverse(nullptr, m_pTransform->GetWorld());
 }
 
 VOID CFollowCamera::Release()

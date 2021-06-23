@@ -10,6 +10,7 @@ typedef struct tagObjInfo
 {
 	XMFLOAT4X4 View;
 	XMFLOAT4X4 Proj;
+	XMFLOAT4 Color;
 }OBJINFO;
 
 typedef struct tagLightInfo

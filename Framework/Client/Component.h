@@ -1,4 +1,5 @@
 #pragma once
+class CGameMgr;
 class CDeviceMgr;
 class CShaderMgr;
 class CComponent
@@ -14,6 +15,7 @@ public:
 	virtual VOID Render();
 
 protected:
+	CGameMgr* m_pGameMgr = nullptr;
 	CDeviceMgr* m_pDeviceMgr = nullptr;
 	CShaderMgr* m_pShaderMgr = nullptr;
 

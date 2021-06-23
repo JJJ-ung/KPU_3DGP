@@ -70,7 +70,7 @@ HRESULT CMainGame::Ready_Manager()
 
 HRESULT CMainGame::Ready_Device()
 {
-	if (FAILED(m_pDeviceMgr->Init_GraphicDevice(VEC4(0, 0, 1, 1.f))))
+	if (FAILED(m_pDeviceMgr->Init_GraphicDevice(VEC4(0.2f, 0.5f, 1.f, 1.f))))
 		return E_FAIL;
 
 	return NOERROR;
@@ -106,9 +106,14 @@ HRESULT CMainGame::Ready_Shader()
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
 	};
-	//if (FAILED(m_pShaderMgr->Add_PipelineState(L"Color", L"..\\Binary\\Shaders\\Test.hlsl", L"..\\Binary\\Shaders\\color.hlsl", "VS", "PS", "vs_5_0", "ps_5_0", &tmp)))
-	//	return E_FAIL;
 	if (FAILED(m_pShaderMgr->Add_PipelineState(L"Default", L"..\\Binary\\Shaders\\Default.hlsl", L"..\\Binary\\Shaders\\Default.hlsl", "VS", "PS", "vs_5_0", "ps_5_0", &tmp)))
+		return E_FAIL;
+
+
+	D3D12_RASTERIZER_DESC tRasterizerDesc = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	tRasterizerDesc.FillMode = D3D12_FILL_MODE_WIREFRAME;
+	if (FAILED(m_pShaderMgr->Add_PipelineState(L"Color", L"..\\Binary\\Shaders\\color.hlsl", L"..\\Binary\\Shaders\\color.hlsl", "VS", "PS", "vs_5_0", "ps_5_0", &tmp,
+		D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, tRasterizerDesc)))
 		return E_FAIL;
 
 	return NOERROR;

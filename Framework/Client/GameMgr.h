@@ -1,11 +1,12 @@
 #pragma once
 class CObj;
 class CScene;
+class CCollision;
 class CGameMgr
 {
 	DECLARE_SINGLETON(CGameMgr)
 public:
-	enum ObjID { BASE, MAP, PLAYER, CAMERA, END };
+	enum ObjID { BASE, MAP, PLAYER, BULLET, MONSTER, CAMERA, END };
 
 private:
 	CGameMgr();
@@ -35,9 +36,15 @@ public:
 	HRESULT Set_CurrScene(CScene* pScene);
 	HRESULT Clear_ObjList();
 
+public:
+	HRESULT Add_Collision(ObjID eID, CCollision* pCollision);
+	HRESULT Delete_Collision(ObjID eID, CCollision* pCollision);
+	list<CCollision*>& Get_CollisionList(ObjID eID);
+
 private:
 	CScene* m_pCurrScene = nullptr;
 	list<CObj*> m_lstGameObj[ObjID::END];
+	list<CCollision*> m_lstCollisionObj[ObjID::END];
 
 private:
 	list<CObj*> m_lstRender;

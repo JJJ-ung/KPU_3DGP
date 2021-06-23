@@ -24,7 +24,7 @@ HRESULT CRacingMap::Initialize()
 		return E_FAIL;
 
 	m_pTransform->Set_Scale(XMFLOAT3(0.1f, 0.1f, 0.1f));
-	m_pTransform->SetState(CTransform::POSITION, XMVectorSet(0.f, -46.5f, 0.f, 1.f));
+	m_pTransform->SetState(CTransform::POSITION, XMVectorSet(0.f, -39.5f, 0.f, 1.f));
 
 	return NOERROR;
 }

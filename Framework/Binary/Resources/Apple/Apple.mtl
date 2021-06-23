@@ -12,6 +12,5 @@ newmtl mPltFruitApple
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\# Programming\# 2020\??? ????\TermProject\???\Model\Nintendo Switch - Animal Crossing New Horizons - Apple\Apple\Textures\mPltFruitApple_Alb.png
-	map_Kd D:\# Programming\# 2020\??? ????\TermProject\???\Model\Nintendo Switch - Animal Crossing New Horizons - Apple\Apple\Textures\mPltFruitApple_Alb.png
-	map_bump -bm 0.3000 Normal_Bump_Normal_Bump.tga
+	map_Ka ../Binary/Resources/Apple/mPltFruitApple_Alb.dds
+	map_Kd ../Binary/Resources/Apple/mPltFruitApple_Alb.dds

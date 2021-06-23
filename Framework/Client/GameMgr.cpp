@@ -42,7 +42,8 @@ INT CGameMgr::ObjectUpdate(const float& fTimeDelta)
 				SafeDelete(*iter);
 				iter = m_lstGameObj[i].erase(iter);
 			}
-			++iter;
+			else
+				++iter;
 		}
 	}
 
@@ -61,7 +62,8 @@ INT CGameMgr::ObjectLateUpdate(const float& fTimeDelta)
 				SafeDelete(*iter);
 				iter = m_lstGameObj[i].erase(iter);
 			}
-			++iter;
+			else
+				++iter;
 		}
 	}
 
@@ -113,4 +115,25 @@ HRESULT CGameMgr::Clear_ObjList()
 	m_lstRender.clear();
 
 	return NOERROR;
+}
+
+HRESULT CGameMgr::Add_Collision(ObjID eID, CCollision* pCollision)
+{
+	if (!pCollision) return E_FAIL;
+	m_lstCollisionObj[eID].emplace_back(pCollision);
+	return NOERROR;
+}
+
+HRESULT CGameMgr::Delete_Collision(ObjID eID, CCollision* pCollision)
+{
+	auto iter = find(m_lstCollisionObj[eID].begin(), m_lstCollisionObj[eID].end(), pCollision);
+	if (iter == m_lstCollisionObj[eID].end())
+		return E_FAIL;
+	m_lstCollisionObj[eID].erase(iter);
+	return NOERROR;
+}
+
+list<CCollision*>& CGameMgr::Get_CollisionList(ObjID eID)
+{
+	return m_lstCollisionObj[eID];
 }
